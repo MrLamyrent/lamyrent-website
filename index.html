@@ -125,6 +125,17 @@ h1 {
     box-shadow: 0 0 15px rgba(255,255,255,0.2);
 }
 
+<img
+ src="https://github-readme-activity-graph.vercel.app/graph?username=lamyrent&theme=github-dark"
+/>
+<p id="time"></p>
+
+<script>
+setInterval(() => {
+  document.getElementById("time").innerText =
+    "local time: " + new Date().toLocaleTimeString();
+}, 1000);
+</script>
 /* music / status */
 
 .status {
