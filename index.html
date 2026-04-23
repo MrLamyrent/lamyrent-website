@@ -6,120 +6,140 @@
 
 <title>Lamyrent</title>
 
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-body {
-    max-width: 680px;
-    margin: 60px auto;
-    padding: 0 20px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 18px;
-    line-height: 1.7;
-    color: #111;
-    background: #ffffff;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+body {
+    font-family: "JetBrains Mono", monospace;
+    height: 100vh;
+    background: radial-gradient(circle at top, #111, #000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* animated background */
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 2px,
+        transparent 2px,
+        transparent 40px
+    );
+    animation: move 25s linear infinite;
+}
+
+@keyframes move {
+    from { transform: translate(0,0); }
+    to { transform: translate(-200px,-200px); }
+}
+
+/* card */
+
+.card {
+    position: relative;
+    backdrop-filter: blur(12px);
+    background: rgba(15,15,15,0.7);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 40px;
+    width: 380px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 2px solid #fff;
+}
+
+/* name */
 
 h1 {
-    font-size: 34px;
-    font-weight: normal;
-    margin-bottom: 10px;
+    font-size: 26px;
+    margin-bottom: 6px;
 }
 
-h2 {
-    margin-top: 50px;
-    font-weight: normal;
+.tag {
+    color: #aaa;
+    margin-bottom: 20px;
 }
 
-a {
-    color: #000;
-    text-decoration: underline;
+/* links */
+
+.links a {
+    display: block;
+    margin: 10px 0;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    transition: 0.25s;
 }
 
-a:hover {
-    opacity: 0.6;
+.links a:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
 }
 
-hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 40px 0;
+/* music / status */
+
+.status {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #888;
 }
 
-.small {
-    color: #666;
-    font-size: 15px;
+/* glow effect */
+
+.card:hover {
+    box-shadow: 0 0 60px rgba(255,255,255,0.15);
 }
 
-ul {
-    padding-left: 20px;
-}
 </style>
 </head>
 
 <body>
 
+<div class="card">
+
+<img class="avatar" src="https://i.pravatar.cc/150" alt="avatar">
+
 <h1>Lamyrent</h1>
+<p class="tag">internet explorer • builder • gamer</p>
 
-<p class="small">
-personal website · internet citizen
+<div class="links">
+    <a href="https://github.com/MrLamyrent">GitHub</a>
+    <a href="#">Discord</a>
+    <a href="#">Telegram</a>
+    <a href="#">Steam</a>
+</div>
+
+<p class="status">
+currently online ⚡ building things
 </p>
 
-<hr>
-
-<p>
-Hi. I'm Lamyrent.
-</p>
-
-<p>
-I like building things on the internet, experimenting with technology,
-and learning how systems work from the inside.
-</p>
-
-<p>
-This site is my small corner of the web — a place to write,
-share projects, and exist independently from social platforms.
-</p>
-
-<hr>
-
-<h2>About</h2>
-
-<p>
-I'm interested in programming, design minimalism,
-internet culture, and creating things that feel simple
-but thoughtful.
-</p>
-
-<p>
-Currently exploring web development, infrastructure,
-and personal digital identity.
-</p>
-
-<hr>
-
-<h2>Projects</h2>
-
-<ul>
-<li>Personal website — this one</li>
-<li>Experiments with Cloudflare & hosting</li>
-<li>Future ideas coming soon</li>
-</ul>
-
-<hr>
-
-<h2>Elsewhere</h2>
-
-<ul>
-<li><a href="#">GitHub</a></li>
-<li><a href="#">Discord</a></li>
-<li><a href="#">Telegram</a></li>
-<li><a href="#">X / Twitter</a></li>
-</ul>
-
-<hr>
-
-<p class="small">
-© 2026 Lamyrent
-</p>
+</div>
 
 </body>
 </html>
