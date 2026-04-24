@@ -10,7 +10,7 @@
 
 <style>
 
-/* ---------------- RESET ---------------- */
+/* ================= RESET ================= */
 
 *{
 margin:0;
@@ -20,138 +20,135 @@ box-sizing:border-box;
 
 body{
 font-family:"JetBrains Mono",monospace;
+background:black;
 color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-background:#000;
 overflow-x:hidden;
 }
 
-/* ---------------- ANIMATED BACKGROUND ---------------- */
+/* ================= MATRIX BACKGROUND ================= */
 
-body::before{
-content:"";
+canvas{
 position:fixed;
-width:200%;
-height:200%;
-background:
-radial-gradient(circle,#111 1px,transparent 1px);
-background-size:40px 40px;
-animation:bgmove 40s linear infinite;
-opacity:.35;
+top:0;
+left:0;
 z-index:-1;
 }
 
-@keyframes bgmove{
-from{transform:translate(0,0);}
-to{transform:translate(-200px,-200px);}
+/* ================= TERMINAL BOOT ================= */
+
+#boot{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+color:#00ff88;
+padding:40px;
+font-size:14px;
+z-index:9999;
 }
 
-/* ---------------- CARD ---------------- */
+/* ================= MAIN CARD ================= */
+
+.wrapper{
+display:flex;
+justify-content:center;
+padding:60px 20px;
+}
 
 .card{
-width:420px;
-backdrop-filter:blur(14px);
+width:760px; /* +100% шире */
 background:rgba(15,15,15,.75);
-border:1px solid rgba(255,255,255,.08);
-padding:35px;
+backdrop-filter:blur(12px);
 border-radius:18px;
-text-align:center;
+padding:40px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
-/* ---------------- AVATAR ---------------- */
+/* ================= SECTIONS ================= */
+
+.section{
+margin-top:35px;
+}
+
+.section h2{
+margin-bottom:12px;
+color:#aaa;
+font-size:15px;
+}
+
+/* ================= AVATAR ================= */
 
 .avatar{
-width:95px;
-height:95px;
+width:110px;
 border-radius:50%;
 margin-bottom:15px;
 border:2px solid white;
 }
 
-/* ---------------- TEXT ---------------- */
-
-h1{
-font-size:26px;
-margin-bottom:6px;
-}
-
-.tag{
-color:#aaa;
-margin-bottom:18px;
-font-size:14px;
-}
-
-.about{
-font-size:14px;
-color:#bbb;
-margin-bottom:25px;
-line-height:1.6;
-}
-
-/* ---------------- LINKS ---------------- */
+/* ================= LINKS ================= */
 
 .links a{
-display:block;
-margin:8px 0;
-padding:11px;
+display:inline-block;
+margin:5px;
+padding:10px 14px;
 text-decoration:none;
 color:white;
-border-radius:10px;
-background:rgba(255,255,255,.05);
-transition:.25s;
+background:#111;
+border-radius:8px;
 }
 
-.links a:hover{
-transform:translateY(-3px);
-background:rgba(255,255,255,.12);
-box-shadow:0 0 15px rgba(255,255,255,.2);
+/* ================= CRT MODE ================= */
+
+body.crt{
+background:#001100;
+color:#00ff88;
+text-shadow:0 0 6px #00ff88;
 }
 
-/* ---------------- YOUTUBE ---------------- */
-
-.section-title{
-margin-top:28px;
-margin-bottom:10px;
-color:#aaa;
-font-size:13px;
-letter-spacing:1px;
+body.crt .card{
+background:rgba(0,20,0,.85);
+border:1px solid #00ff88;
 }
 
-iframe{
+/* scanlines */
+
+body.crt::after{
+content:"";
+position:fixed;
 width:100%;
-border-radius:12px;
-border:none;
+height:100%;
+pointer-events:none;
+background:repeating-linear-gradient(
+to bottom,
+transparent 0px,
+transparent 2px,
+rgba(0,0,0,.25) 3px
+);
+animation:flicker .15s infinite;
 }
 
-/* ---------------- MODRINTH CARD ---------------- */
+@keyframes flicker{
+0%{opacity:.96;}
+50%{opacity:1;}
+100%{opacity:.95;}
+}
+
+.toggle{
+position:fixed;
+top:20px;
+right:20px;
+background:#111;
+padding:10px;
+cursor:pointer;
+border-radius:8px;
+}
+
+/* ================= MOD CARD ================= */
 
 .mod-card{
-margin-top:15px;
+background:#111;
 padding:15px;
-background:rgba(255,255,255,.05);
 border-radius:12px;
-transition:.25s;
-}
-
-.mod-card:hover{
-background:rgba(255,255,255,.12);
-transform:translateY(-3px);
-}
-
-.mod-card a{
-color:white;
-text-decoration:none;
-font-weight:600;
-}
-
-.status{
-margin-top:20px;
-font-size:13px;
-color:#777;
 }
 
 </style>
@@ -159,87 +156,211 @@ color:#777;
 
 <body>
 
+<!-- MATRIX BACKGROUND -->
+<canvas id="matrix"></canvas>
+
+<!-- BOOT SCREEN -->
+<div id="boot">
+<div id="boot-text"></div>
+</div>
+
+<!-- CRT TOGGLE -->
+<div class="toggle" onclick="toggleCRT()">CRT</div>
+
+<div class="wrapper">
 <div class="card">
 
-<!-- ================= AVATAR ================= -->
-<!-- ВСТАВЬ СЮДА СВОЮ АВАТАРКУ -->
-<img class="avatar" src="assets/avatar.png" alt="avatar">
+<!-- ================= ABOUT ================= -->
 
+<img class="avatar" src="assets/avatar.png">
 
-<h1>Lamyrent</h1>
+<h1 id="typing"></h1>
 
-<!-- ТВОЙ DESCRIPTION -->
-<p class="tag">builder • gamer • developer</p>
+<div class="section">
+<h2>About Me</h2>
 
-<!-- ================= ABOUT ME ================= -->
-<!-- НАПИШИ КОРОТКО О СЕБЕ -->
-<p class="about">
-Hi, I'm Lamyrent.<br>
-I build random internet things, Minecraft mods and experiment with servers & web.
+<!-- ВСТАВЬ ОПИСАНИЕ -->
+<p>
+write your bio here.
+builder • gamer • developer
 </p>
-
-
-<!-- ================= SOCIAL LINKS ================= -->
-<div class="links">
-
-<!-- ВСТАВЬ СВОИ ССЫЛКИ -->
-<a href="https://github.com/MrLamyrent">GitHub</a>
-
-<a href="https://discord.com/users/lamyrent">Discord</a>
-
-<a href="https://t.me/YOURNAME">Telegram</a>
-
-<a href="https://steamcommunity.com/id/YOURID">Steam</a>
 
 </div>
 
+<!-- ================= LINKS ================= -->
+
+<div class="section links">
+<a href="https://github.com/MrLamyrent">GitHub</a>
+<a href="#">Discord</a>
+<a href="#">Telegram</a>
+<a href="#">Steam</a>
+</div>
+
+<!-- ================= DISCORD STATUS ================= -->
+
+<div class="section">
+<h2>Discord Status</h2>
+
+<p id="discord-status">loading...</p>
+
+</div>
 
 <!-- ================= YOUTUBE ================= -->
-<div class="section-title">YOUTUBE</div>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b1aWgic5keM?si=07mXsFFIuIl7bXSf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<!--
-КАК ВСТАВИТЬ ВИДЕО:
 
-1. Открой видео
-2. Share → Embed
-3. Скопируй src
-4. Замени VIDEO_ID
--->
+<div class="section">
+<h2>YouTube</h2>
 
-<iframe
-height="215"
-src="https://www.youtube.com/embed/b1aWgic5keM?si=07mXsFFIuIl7bXSf">
-</iframe>
+<!-- ВСТАВЬ VIDEO ID -->
+<iframe width="100%" height="350"
+src="https://www.youtube.com/embed/b1aWgic5keM?si=PgFxD3uwzJG78Mas"
+frameborder="0"
+allowfullscreen></iframe>
 
+</div>
 
 <!-- ================= MODRINTH ================= -->
 
-<div class="section-title">MY MOD</div>
+<div class="section">
+<h2>My Mod (Modrinth)</h2>
 
-<div class="mod-card">
+<div id="modrinth" class="mod-card">
+loading mod...
+</div>
 
-<!--
-ВСТАВЬ СЮДА СВОЙ MODRINTH MOD
--->
+</div>
 
-<a href="https://modrinth.com/plugin/witherss">
-🔥 My Minecraft Mod
+<!-- ================= VISITOR COUNTER ================= -->
+
+<div class="section">
+<h2>Visitors</h2>
+<p id="visits">loading...</p>
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* ================= TYPING INTRO ================= */
+
+const text="Initializing Lamyrent...";
+let i=0;
+
+function type(){
+if(i<text.length){
+document.getElementById("typing").innerHTML+=text.charAt(i);
+i++;
+setTimeout(type,60);
+}
+}
+type();
+
+/* ================= TERMINAL BOOT ================= */
+
+const bootLines=[
+"Booting system...",
+"Loading modules...",
+"Connecting to network...",
+"Authenticating user...",
+"Welcome User."
+];
+
+let bootIndex=0;
+
+function boot(){
+if(bootIndex<bootLines.length){
+document.getElementById("boot-text").innerHTML+=bootLines[bootIndex]+"<br>";
+bootIndex++;
+setTimeout(boot,600);
+}else{
+setTimeout(()=>{
+document.getElementById("boot").style.display="none";
+},800);
+}
+}
+boot();
+
+/* ================= MATRIX RAIN ================= */
+
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+const letters="01";
+const fontSize=14;
+const columns=canvas.width/fontSize;
+const drops=[];
+
+for(let x=0;x<columns;x++)drops[x]=1;
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#0f0";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+const text=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+}
+}
+setInterval(draw,33);
+
+/* ================= CRT TOGGLE ================= */
+
+function toggleCRT(){
+document.body.classList.toggle("crt");
+localStorage.setItem("crt",document.body.classList.contains("crt"));
+}
+
+if(localStorage.getItem("crt")==="true"){
+document.body.classList.add("crt");
+}
+
+/* ================= DISCORD STATUS ================= */
+/* ВСТАВЬ DISCORD USER ID */
+
+fetch("https://api.lanyard.rest/v1/users/986947762132254732")
+.then(r=>r.json())
+.then(data=>{
+const d=data.data;
+document.getElementById("discord-status").innerText=
+d.discord_status;
+});
+
+/* ================= VISITOR COUNTER ================= */
+
+fetch("https://api.countapi.xyz/hit/lamyrent.qzz.io/visits")
+.then(r=>r.json())
+.then(data=>{
+document.getElementById("visits").innerText=
+data.value+" visits";
+});
+
+/* ================= MODRINTH API ================= */
+/* ВСТАВЬ SLUG МОДА */
+
+fetch("https://api.modrinth.com/v2/project/plugin/witherss")
+.then(r=>r.json())
+.then(mod=>{
+document.getElementById("modrinth").innerHTML=`
+<h3>${mod.title}</h3>
+<p>${mod.description}</p>
+<a href="https://modrinth.com/mod/${mod.slug}" target="_blank">
+Open on Modrinth →
 </a>
+`;
+});
 
-<p style="font-size:13px;color:#aaa;margin-top:6px;">
-Fabric / Paper • Open Source
-</p>
-
-</div>
-
-
-<!-- ================= STATUS ================= -->
-
-<p class="status">
-currently building something cool ⚡
-</p>
-
-</div>
+</script>
 
 </body>
 </html>
