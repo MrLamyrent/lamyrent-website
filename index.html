@@ -165,7 +165,6 @@ border-radius:12px;
 </div>
 
 <!-- CRT TOGGLE -->
-<div class="toggle" onclick="toggleCRT()">CRT</div>
 
 <div class="wrapper">
 <div class="card">
@@ -316,17 +315,6 @@ drops[i]++;
 }
 setInterval(draw,33);
 
-/* ================= CRT TOGGLE ================= */
-
-function toggleCRT(){
-document.body.classList.toggle("crt");
-localStorage.setItem("crt",document.body.classList.contains("crt"));
-}
-
-if(localStorage.getItem("crt")==="true"){
-document.body.classList.add("crt");
-}
-
 /* ================= DISCORD STATUS ================= */
 /* ВСТАВЬ DISCORD USER ID */
 
@@ -350,7 +338,7 @@ data.value+" visits";
 /* ================= MODRINTH API ================= */
 /* ВСТАВЬ SLUG МОДА */
 
-fetch("https://api.modrinth.com/v2/project/plugin/witherss")
+fetch("https://api.modrinth.com/v2/project/witherss")
 .then(r=>r.json())
 .then(mod=>{
 document.getElementById("modrinth").innerHTML=`
