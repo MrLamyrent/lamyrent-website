@@ -309,13 +309,17 @@ avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
 
 /* VISITS (fallback система) */
 
-fetch("https://visits.lamyrent.workers.dev")
-.then(r=>r.json())
+fetch("https://visitors.lamyrent.workers.dev")
+.then(r=>{
+if(!r.ok) throw new Error("HTTP "+r.status);
+return r.json();
+})
 .then(data=>{
 document.getElementById("visits").innerText =
 data.visits + " visits";
 })
-.catch(()=>{
+.catch(err=>{
+console.error(err);
 document.getElementById("visits").innerText="error";
 });
   
