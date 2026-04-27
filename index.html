@@ -203,7 +203,7 @@ allowfullscreen></iframe>
 <!-- MOD -->
 
 <div class="section">
-<h2>My Mod</h2>
+<h2>My Plugin</h2>
 <div id="modrinth" class="mod-card">loading...</div>
 </div>
 
@@ -232,7 +232,7 @@ setTimeout(type,60);
 
 /* BOOT */
 
-const bootLines=["Booting...","Loading...","Connecting...","Auth...","Welcome."];
+const bootLines=["Booting...","Loading...","Connecting...","Auth...","Welcome User."];
 let b=0;
 
 (function boot(){
@@ -309,20 +309,16 @@ avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
 
 /* VISITS (fallback система) */
 
-fetch("https://api.countapi.xyz/hit/lamyrent-global/visits")
+fetch("https://visits.lamyrent.workers.dev")
 .then(r=>r.json())
-.then(d=>{
-document.getElementById("visits").innerText=d.value+" visits";
+.then(data=>{
+document.getElementById("visits").innerText =
+data.visits + " visits";
 })
 .catch(()=>{
-
-let local=localStorage.getItem("visits") || 0;
-local++;
-localStorage.setItem("visits",local);
-
-document.getElementById("visits").innerText=local+" visits (local)";
+document.getElementById("visits").innerText="error";
 });
-
+  
 /* MODRINTH */
 
 fetch("https://api.modrinth.com/v2/project/witherss")
