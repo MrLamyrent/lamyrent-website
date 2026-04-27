@@ -11,7 +11,7 @@
 
 <style>
 
-/* ================= RESET ================= */
+/* RESET */
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
@@ -83,7 +83,22 @@ border:1px solid #00ff88;
 border-radius:18px;
 padding:40px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
+transition:.4s;
 }
+
+/* BLUR EFFECT */
+
+.wrapper:hover .card{
+filter:blur(2px) brightness(.7);
+}
+
+.card:hover{
+filter:blur(0) brightness(1);
+transform:scale(1.01);
+box-shadow:0 0 60px rgba(0,255,136,0.25);
+}
+
+/* SECTIONS */
 
 .section{margin-top:35px;}
 
@@ -93,7 +108,7 @@ color:#88ffcc;
 font-size:15px;
 }
 
-/* AVATAR + STATUS */
+/* AVATAR */
 
 #discord-box{
 position:relative;
@@ -108,26 +123,24 @@ border:3px solid #00ff88;
 transition:.3s;
 }
 
-/* статус кружок */
+/* STATUS DOT */
 
 #status-dot{
 position:absolute;
 bottom:2px;
 right:2px;
-width:22px; /* увеличен */
+width:22px;
 height:22px;
 border-radius:50%;
 border:3px solid #001100;
 }
-
-/* цвета */
 
 .online{background:#43b581;}
 .offline{background:#747f8d;}
 .idle{background:#faa61a;}
 .dnd{background:#f04747;}
 
-/* LINKS */
+/* LINKS HOVER */
 
 .links a{
 display:inline-block;
@@ -137,6 +150,52 @@ text-decoration:none;
 color:#00ff88;
 background:#002200;
 border-radius:8px;
+transition:.25s;
+}
+
+.links a:hover{
+transform:translateY(-3px) scale(1.05);
+background:#003300;
+box-shadow:0 0 12px #00ff88;
+}
+
+/* GLITCH */
+
+.glitch{
+position:relative;
+font-weight:600;
+}
+
+.glitch::before,
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+left:0;
+width:100%;
+}
+
+.glitch::before{
+color:#ff00c8;
+z-index:-1;
+animation:glitchTop 2s infinite linear;
+}
+
+.glitch::after{
+color:#00fff9;
+z-index:-2;
+animation:glitchBottom 2s infinite linear;
+}
+
+@keyframes glitchTop{
+0%{clip-path:inset(0 0 80% 0);transform:translate(-2px,-2px);}
+50%{clip-path:inset(0 0 30% 0);transform:translate(2px,2px);}
+100%{clip-path:inset(0 0 80% 0);}
+}
+
+@keyframes glitchBottom{
+0%{clip-path:inset(80% 0 0 0);transform:translate(2px,2px);}
+50%{clip-path:inset(30% 0 0 0);transform:translate(-2px,-2px);}
+100%{clip-path:inset(80% 0 0 0);}
 }
 
 /* MOD */
@@ -169,7 +228,9 @@ border-radius:12px;
 <div id="status-dot"></div>
 </div>
 
-<h1 id="typing"></h1>
+<!-- GLITCH NAME -->
+
+<h1 id="typing" class="glitch" data-text="Lamyrent"></h1>
 
 <!-- ABOUT -->
 
@@ -177,7 +238,6 @@ border-radius:12px;
 <h2>About Me</h2>
 <p>
 I'm Lamyrent — a developer focused on Minecraft modding, plugins, and creative projects.
-I enjoy turning ideas into working things, sharing them on YouTube, and constantly exploring new technologies.
 </p>
 </div>
 
@@ -219,16 +279,8 @@ allowfullscreen></iframe>
 
 <script>
 
-/* TYPING */
-
-const text="Initializing Lamyrent...";
-let i=0;
-(function type(){
-if(i<text.length){
-document.getElementById("typing").innerHTML+=text[i++];
-setTimeout(type,60);
-}
-})();
+/* NAME (для glitch) */
+document.getElementById("typing").innerText="Lamyrent";
 
 /* BOOT */
 
@@ -287,7 +339,6 @@ drops[i]++;
 fetch("https://api.lanyard.rest/v1/users/986947762132254732")
 .then(r=>r.json())
 .then(({data:d})=>{
-
 const avatar=document.getElementById("discord-avatar");
 avatar.src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
 
@@ -295,7 +346,6 @@ const dot=document.getElementById("status-dot");
 dot.className="";
 dot.classList.add(d.discord_status);
 
-/* меняем цвет рамки */
 const colors={
 online:"#43b581",
 idle:"#faa61a",
@@ -304,25 +354,19 @@ offline:"#747f8d"
 };
 
 avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
-
 });
 
-/* VISITS (fallback система) */
+/* VISITS */
 
 fetch("https://visitors.lamyrent.workers.dev")
-.then(r=>{
-if(!r.ok) throw new Error("HTTP "+r.status);
-return r.json();
-})
+.then(r=>r.json())
 .then(data=>{
-document.getElementById("visits").innerText =
-data.visits + " visits";
+document.getElementById("visits").innerText=data.visits+" visits";
 })
-.catch(err=>{
-console.error(err);
+.catch(()=>{
 document.getElementById("visits").innerText="error";
 });
-  
+
 /* MODRINTH */
 
 fetch("https://api.modrinth.com/v2/project/witherss")
@@ -333,9 +377,6 @@ document.getElementById("modrinth").innerHTML=`
 <p>${mod.description}</p>
 <a href="https://modrinth.com/mod/${mod.slug}" target="_blank">Open →</a>
 `;
-})
-.catch(()=>{
-document.getElementById("modrinth").innerText="error";
 });
 
 </script>
