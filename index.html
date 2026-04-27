@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +11,8 @@
 
 <style>
 
+/* RESET */
+
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
@@ -20,19 +23,8 @@ color:#00ff88;
 text-shadow:0 0 6px #00ff88;
 }
 
-/* CURSOR GLOW */
-.cursor-glow{
-position:fixed;
-width:300px;
-height:300px;
-border-radius:50%;
-pointer-events:none;
-background:radial-gradient(circle,#00ff8855,transparent 70%);
-transform:translate(-50%,-50%);
-z-index:-1;
-}
-
 /* CRT */
+
 body::after{
 content:"";
 position:fixed;
@@ -54,14 +46,17 @@ animation:flicker .15s infinite;
 100%{opacity:.95;}
 }
 
+/* MATRIX */
+
 canvas{
 position:fixed;
 top:0;
 left:0;
-z-index:-2;
+z-index:-1;
 }
 
 /* BOOT */
+
 #boot{
 position:fixed;
 width:100%;
@@ -74,6 +69,7 @@ z-index:9999;
 }
 
 /* MAIN */
+
 .wrapper{
 display:flex;
 justify-content:center;
@@ -87,21 +83,75 @@ border:1px solid #00ff88;
 border-radius:18px;
 padding:40px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
+transition:.4s;
 }
 
-.header{
-display:flex;
-align-items:center;
-gap:25px;
+/* FOCUS GLOW EFFECT */
+
+.card{
+width:760px;
+background:rgba(0,20,0,.85);
+border:1px solid #00ff88;
+border-radius:18px;
+padding:40px;
+box-shadow:0 0 40px rgba(0,0,0,.8);
+transition:.4s;
+
+/* новый эффект */
+opacity:.85;
+}
+
+/* hover состояние */
+
+.card:hover{
+opacity:1;
+transform:scale(1.02);
+box-shadow:0 0 80px rgba(0,255,136,0.35);
+}
+
+/* SECTIONS */
+
+.section{margin-top:35px;}
+
+.section h2{
+margin-bottom:12px;
+color:#88ffcc;
+font-size:15px;
+}
+
+/* AVATAR */
+
+#discord-box{
+position:relative;
+display:inline-block;
 }
 
 .avatar{
 width:110px;
 border-radius:50%;
+margin-bottom:15px;
 border:3px solid #00ff88;
+transition:.3s;
 }
 
-.section{margin-top:35px;}
+/* STATUS DOT */
+
+#status-dot{
+position:absolute;
+bottom:2px;
+right:2px;
+width:22px;
+height:22px;
+border-radius:50%;
+border:3px solid #001100;
+}
+
+.online{background:#43b581;}
+.offline{background:#747f8d;}
+.idle{background:#faa61a;}
+.dnd{background:#f04747;}
+
+/* LINKS HOVER */
 
 .links a{
 display:inline-block;
@@ -111,24 +161,55 @@ text-decoration:none;
 color:#00ff88;
 background:#002200;
 border-radius:8px;
+transition:.25s;
 }
 
 .links a:hover{
+transform:translateY(-3px) scale(1.05);
 background:#003300;
 box-shadow:0 0 12px #00ff88;
 }
 
-.plugin-wrapper{
-display:flex;
-align-items:center;
-gap:20px;
+/* GLITCH */
+
+.glitch{
+position:relative;
+font-weight:600;
 }
 
-.plugin-avatar{
-width:90px;
-border-radius:14px;
-border:2px solid #00ff88;
+.glitch::before,
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+left:0;
+width:100%;
 }
+
+.glitch::before{
+color:#ff00c8;
+z-index:-1;
+animation:glitchTop 2s infinite linear;
+}
+
+.glitch::after{
+color:#00fff9;
+z-index:-2;
+animation:glitchBottom 2s infinite linear;
+}
+
+@keyframes glitchTop{
+0%{clip-path:inset(0 0 80% 0);transform:translate(-2px,-2px);}
+50%{clip-path:inset(0 0 30% 0);transform:translate(2px,2px);}
+100%{clip-path:inset(0 0 80% 0);}
+}
+
+@keyframes glitchBottom{
+0%{clip-path:inset(80% 0 0 0);transform:translate(2px,2px);}
+50%{clip-path:inset(30% 0 0 0);transform:translate(-2px,-2px);}
+100%{clip-path:inset(80% 0 0 0);}
+}
+
+/* MOD */
 
 .mod-card{
 background:#002200;
@@ -136,14 +217,11 @@ padding:15px;
 border-radius:12px;
 }
 
-.glitch{font-weight:600;}
-
 </style>
+
 </head>
 
 <body>
-
-<div class="cursor-glow" id="glow"></div>
 
 <canvas id="matrix"></canvas>
 
@@ -154,39 +232,53 @@ border-radius:12px;
 <div class="wrapper">
 <div class="card">
 
-<div class="header">
-<img id="discord-avatar" class="avatar" src="assets/avatar.png">
+<!-- AVATAR -->
 
-<div>
-<h1 id="typing" class="glitch">Lamyrent</h1>
-<div id="activity">Loading activity...</div>
+<div id="discord-box">
+<img id="discord-avatar" class="avatar" src="assets/avatar.png">
+<div id="status-dot"></div>
 </div>
-</div>
+
+<!-- GLITCH NAME -->
+
+<h1 id="typing" class="glitch" data-text="Lamyrent"></h1>
+
+<!-- ABOUT -->
 
 <div class="section">
 <h2>About Me</h2>
-<p>I'm Lamyrent — a developer focused on Minecraft plugins.</p>
+<p>
+I'm Lamyrent — a developer focused on Minecraft modding, plugins, and creative projects.
+</p>
 </div>
+
+<!-- LINKS -->
 
 <div class="section links">
-
-<!-- ВСТАВЬ СВОИ ССЫЛКИ -->
-<a href="https://github.com/MrLamyrent" target="_blank">GitHub</a>
-<a href="PASTE_DISCORD_LINK">Discord</a>
-<a href="PASTE_TELEGRAM_LINK">Telegram</a>
-<a href="PASTE_STEAM_LINK">Steam</a>
-
+<a href="https://github.com/MrLamyrent">GitHub</a>
+<a href="#">Discord</a>
+<a href="#">Telegram</a>
+<a href="#">Steam</a>
 </div>
+
+<!-- YOUTUBE -->
+
+<div class="section">
+<h2>YouTube</h2>
+<iframe width="100%" height="350"
+src="https://www.youtube.com/embed/b1aWgic5keM"
+frameborder="0"
+allowfullscreen></iframe>
+</div>
+
+<!-- MOD -->
 
 <div class="section">
 <h2>My Plugin</h2>
-
-<div class="plugin-wrapper">
-<img src="assets/avatar-paper.png" class="plugin-avatar">
 <div id="modrinth" class="mod-card">loading...</div>
 </div>
 
-</div>
+<!-- VISITS -->
 
 <div class="section">
 <h2>Visitors</h2>
@@ -198,34 +290,25 @@ border-radius:12px;
 
 <script>
 
-/* CURSOR GLOW */
-const glow=document.getElementById("glow");
-document.addEventListener("mousemove",e=>{
-glow.style.left=e.clientX+"px";
-glow.style.top=e.clientY+"px";
-});
+/* NAME (для glitch) */
+document.getElementById("typing").innerText="Lamyrent";
 
 /* BOOT */
-const bootText=document.getElementById("boot-text");
-const bootLines=[
-"booting kernel...",
-"loading modules...",
-"connecting discord api...",
-"starting lamyrent.sys",
-"access granted."
-];
 
+const bootLines=["Booting...","Loading...","Connecting...","Auth...","Welcome User."];
 let b=0;
+
 (function boot(){
 if(b<bootLines.length){
-bootText.innerHTML+=bootLines[b++]+"<br>";
-setTimeout(boot,500);
+document.getElementById("boot-text").innerHTML+=bootLines[b++]+"<br>";
+setTimeout(boot,600);
 }else{
-setTimeout(()=>document.getElementById("boot").style.display="none",800);
+setTimeout(()=>boot=document.getElementById("boot").style.display="none",800);
 }
 })();
 
 /* MATRIX */
+
 const canvas=document.getElementById("matrix");
 const ctx=canvas.getContext("2d");
 
@@ -245,6 +328,7 @@ drops=[];
 for(let i=0;i<canvas.width/fontSize;i++)drops[i]=1;
 }
 reset();
+addEventListener("resize",reset);
 
 setInterval(()=>{
 ctx.fillStyle="rgba(0,0,0,0.05)";
@@ -261,32 +345,41 @@ drops[i]++;
 });
 },33);
 
-/* DISCORD ACTIVITY */
+/* DISCORD */
+
 fetch("https://api.lanyard.rest/v1/users/986947762132254732")
 .then(r=>r.json())
 .then(({data:d})=>{
 const avatar=document.getElementById("discord-avatar");
 avatar.src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
 
-const act=document.getElementById("activity");
+const dot=document.getElementById("status-dot");
+dot.className="";
+dot.classList.add(d.discord_status);
 
-if(d.listening_to_spotify){
-act.innerText=`Listening: ${d.spotify.song}`;
-}else if(d.activities.length>0){
-act.innerText=d.activities[0].name;
-}else{
-act.innerText="Idle";
-}
+const colors={
+online:"#43b581",
+idle:"#faa61a",
+dnd:"#f04747",
+offline:"#747f8d"
+};
+
+avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
 });
 
 /* VISITS */
+
 fetch("https://visitors.lamyrent.workers.dev")
 .then(r=>r.json())
 .then(data=>{
 document.getElementById("visits").innerText=data.visits+" visits";
+})
+.catch(()=>{
+document.getElementById("visits").innerText="error";
 });
 
 /* MODRINTH */
+
 fetch("https://api.modrinth.com/v2/project/witherss")
 .then(r=>r.json())
 .then(mod=>{
