@@ -13,24 +13,17 @@
 
 /* ================= RESET ================= */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
 font-family:"JetBrains Mono",monospace;
 overflow-x:hidden;
-}
-
-/* ================= CRT MODE DEFAULT ================= */
-
-body{
 background:#001100;
 color:#00ff88;
 text-shadow:0 0 6px #00ff88;
 }
+
+/* CRT */
 
 body::after{
 content:"";
@@ -53,7 +46,7 @@ animation:flicker .15s infinite;
 100%{opacity:.95;}
 }
 
-/* ================= MATRIX ================= */
+/* MATRIX */
 
 canvas{
 position:fixed;
@@ -62,7 +55,7 @@ left:0;
 z-index:-1;
 }
 
-/* ================= BOOT ================= */
+/* BOOT */
 
 #boot{
 position:fixed;
@@ -75,7 +68,7 @@ font-size:14px;
 z-index:9999;
 }
 
-/* ================= MAIN ================= */
+/* MAIN */
 
 .wrapper{
 display:flex;
@@ -92,11 +85,7 @@ padding:40px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 }
 
-/* ================= SECTIONS ================= */
-
-.section{
-margin-top:35px;
-}
+.section{margin-top:35px;}
 
 .section h2{
 margin-bottom:12px;
@@ -104,16 +93,41 @@ color:#88ffcc;
 font-size:15px;
 }
 
-/* ================= AVATAR ================= */
+/* AVATAR + STATUS */
+
+#discord-box{
+position:relative;
+display:inline-block;
+}
 
 .avatar{
 width:110px;
 border-radius:50%;
 margin-bottom:15px;
-border:2px solid #00ff88;
+border:3px solid #00ff88;
+transition:.3s;
 }
 
-/* ================= LINKS ================= */
+/* статус кружок */
+
+#status-dot{
+position:absolute;
+bottom:2px;
+right:2px;
+width:22px; /* увеличен */
+height:22px;
+border-radius:50%;
+border:3px solid #001100;
+}
+
+/* цвета */
+
+.online{background:#43b581;}
+.offline{background:#747f8d;}
+.idle{background:#faa61a;}
+.dnd{background:#f04747;}
+
+/* LINKS */
 
 .links a{
 display:inline-block;
@@ -125,29 +139,7 @@ background:#002200;
 border-radius:8px;
 }
 
-/* ================= DISCORD ================= */
-
-#discord-box{
-position:relative;
-display:inline-block;
-}
-
-#status-dot{
-position:absolute;
-bottom:6px;
-right:6px;
-width:18px;
-height:18px;
-border-radius:50%;
-border:3px solid #001100;
-}
-
-.online{background:#43b581;}
-.offline{background:#747f8d;}
-.idle{background:#faa61a;}
-.dnd{background:#f04747;}
-
-/* ================= MOD ================= */
+/* MOD */
 
 .mod-card{
 background:#002200;
@@ -170,7 +162,7 @@ border-radius:12px;
 <div class="wrapper">
 <div class="card">
 
-<!-- AVATAR + NAME -->
+<!-- AVATAR -->
 
 <div id="discord-box">
 <img id="discord-avatar" class="avatar" src="assets/avatar.png">
@@ -186,7 +178,6 @@ border-radius:12px;
 <p>
 I'm Lamyrent — a developer focused on Minecraft modding, plugins, and creative projects.
 I enjoy turning ideas into working things, sharing them on YouTube, and constantly exploring new technologies.
-Building, learning, and improving every day.
 </p>
 </div>
 
@@ -199,13 +190,6 @@ Building, learning, and improving every day.
 <a href="#">Steam</a>
 </div>
 
-<!-- DISCORD -->
-
-<div class="section">
-<h2>Discord Status</h2>
-<p id="discord-status">loading...</p>
-</div>
-
 <!-- YOUTUBE -->
 
 <div class="section">
@@ -216,7 +200,7 @@ frameborder="0"
 allowfullscreen></iframe>
 </div>
 
-<!-- MODRINTH -->
+<!-- MOD -->
 
 <div class="section">
 <h2>My Mod</h2>
@@ -235,124 +219,111 @@ allowfullscreen></iframe>
 
 <script>
 
-/* ================= TYPING ================= */
+/* TYPING */
 
 const text="Initializing Lamyrent...";
 let i=0;
-
-function type(){
+(function type(){
 if(i<text.length){
-document.getElementById("typing").innerHTML+=text.charAt(i);
-i++;
+document.getElementById("typing").innerHTML+=text[i++];
 setTimeout(type,60);
 }
-}
-type();
+})();
 
-/* ================= BOOT ================= */
+/* BOOT */
 
-const bootLines=[
-"Booting system...",
-"Loading modules...",
-"Connecting...",
-"Authenticating...",
-"Welcome."
-];
+const bootLines=["Booting...","Loading...","Connecting...","Auth...","Welcome."];
+let b=0;
 
-let bootIndex=0;
-
-function boot(){
-if(bootIndex<bootLines.length){
-document.getElementById("boot-text").innerHTML+=bootLines[bootIndex]+"<br>";
-bootIndex++;
+(function boot(){
+if(b<bootLines.length){
+document.getElementById("boot-text").innerHTML+=bootLines[b++]+"<br>";
 setTimeout(boot,600);
 }else{
-setTimeout(()=>{
-document.getElementById("boot").style.display="none";
-},800);
+setTimeout(()=>boot=document.getElementById("boot").style.display="none",800);
 }
-}
-boot();
+})();
 
-/* ================= MATRIX ================= */
+/* MATRIX */
 
 const canvas=document.getElementById("matrix");
 const ctx=canvas.getContext("2d");
 
 function resize(){
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+canvas.width=innerWidth;
+canvas.height=innerHeight;
 }
 resize();
-
-window.addEventListener("resize",resize);
+addEventListener("resize",resize);
 
 const letters="01";
 const fontSize=14;
-let columns=canvas.width/fontSize;
 let drops=[];
 
-function resetDrops(){
-columns=canvas.width/fontSize;
+function reset(){
 drops=[];
-for(let x=0;x<columns;x++)drops[x]=1;
+for(let i=0;i<canvas.width/fontSize;i++)drops[i]=1;
 }
-resetDrops();
+reset();
+addEventListener("resize",reset);
 
-function draw(){
+setInterval(()=>{
 ctx.fillStyle="rgba(0,0,0,0.05)";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
 ctx.fillStyle="#0f0";
 ctx.font=fontSize+"px monospace";
 
-for(let i=0;i<drops.length;i++){
-const text=letters[Math.floor(Math.random()*letters.length)];
-ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-
-if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)
-drops[i]=0;
-
+drops.forEach((y,i)=>{
+const text=letters[Math.floor(Math.random()*2)];
+ctx.fillText(text,i*fontSize,y*fontSize);
+if(y*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
 drops[i]++;
-}
-}
-setInterval(draw,33);
+});
+},33);
 
-window.addEventListener("resize",resetDrops);
-
-/* ================= DISCORD ================= */
+/* DISCORD */
 
 fetch("https://api.lanyard.rest/v1/users/986947762132254732")
 .then(r=>r.json())
-.then(data=>{
-const d=data.data;
+.then(({data:d})=>{
 
-document.getElementById("discord-status").innerText = d.discord_status;
-
-document.getElementById("discord-avatar").src =
-`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
+const avatar=document.getElementById("discord-avatar");
+avatar.src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
 
 const dot=document.getElementById("status-dot");
 dot.className="";
 dot.classList.add(d.discord_status);
-})
-.catch(()=>{
-document.getElementById("discord-status").innerText="error";
+
+/* меняем цвет рамки */
+const colors={
+online:"#43b581",
+idle:"#faa61a",
+dnd:"#f04747",
+offline:"#747f8d"
+};
+
+avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
+
 });
 
-/* ================= VISITS ================= */
+/* VISITS (fallback система) */
 
-fetch("https://api.countapi.xyz/hit/lamyrent-site/visits")
+fetch("https://api.countapi.xyz/hit/lamyrent-global/visits")
 .then(r=>r.json())
-.then(data=>{
-document.getElementById("visits").innerText =
-data.value + " visits";
+.then(d=>{
+document.getElementById("visits").innerText=d.value+" visits";
 })
 .catch(()=>{
-document.getElementById("visits").innerText="error";
+
+let local=localStorage.getItem("visits") || 0;
+local++;
+localStorage.setItem("visits",local);
+
+document.getElementById("visits").innerText=local+" visits (local)";
 });
 
-/* ================= MODRINTH ================= */
+/* MODRINTH */
 
 fetch("https://api.modrinth.com/v2/project/witherss")
 .then(r=>r.json())
@@ -360,9 +331,7 @@ fetch("https://api.modrinth.com/v2/project/witherss")
 document.getElementById("modrinth").innerHTML=`
 <h3>${mod.title}</h3>
 <p>${mod.description}</p>
-<a href="https://modrinth.com/mod/${mod.slug}" target="_blank">
-Open →
-</a>
+<a href="https://modrinth.com/mod/${mod.slug}" target="_blank">Open →</a>
 `;
 })
 .catch(()=>{
