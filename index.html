@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,7 +11,6 @@
 <style>
 
 /* RESET */
-
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
@@ -23,8 +21,20 @@ color:#00ff88;
 text-shadow:0 0 6px #00ff88;
 }
 
-/* CRT */
+/* CURSOR GLOW */
+body::before{
+content:"";
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+pointer-events:none;
+background:radial-gradient(circle,#00ff8855,transparent 70%);
+transform:translate(-50%,-50%);
+z-index:-1;
+}
 
+/* CRT */
 body::after{
 content:"";
 position:fixed;
@@ -47,16 +57,14 @@ animation:flicker .15s infinite;
 }
 
 /* MATRIX */
-
 canvas{
 position:fixed;
 top:0;
 left:0;
-z-index:-1;
+z-index:-2;
 }
 
 /* BOOT */
-
 #boot{
 position:fixed;
 width:100%;
@@ -69,7 +77,6 @@ z-index:9999;
 }
 
 /* MAIN */
-
 .wrapper{
 display:flex;
 justify-content:center;
@@ -84,24 +91,8 @@ border-radius:18px;
 padding:40px;
 box-shadow:0 0 40px rgba(0,0,0,.8);
 transition:.4s;
+opacity:.9;
 }
-
-/* FOCUS GLOW EFFECT */
-
-.card{
-width:760px;
-background:rgba(0,20,0,.85);
-border:1px solid #00ff88;
-border-radius:18px;
-padding:40px;
-box-shadow:0 0 40px rgba(0,0,0,.8);
-transition:.4s;
-
-/* новый эффект */
-opacity:.85;
-}
-
-/* hover состояние */
 
 .card:hover{
 opacity:1;
@@ -109,32 +100,24 @@ transform:scale(1.02);
 box-shadow:0 0 80px rgba(0,255,136,0.35);
 }
 
-/* SECTIONS */
-
 .section{margin-top:35px;}
+.section h2{margin-bottom:12px;color:#88ffcc;font-size:15px;}
 
-.section h2{
-margin-bottom:12px;
-color:#88ffcc;
-font-size:15px;
+/* HEADER FLEX */
+.header{
+display:flex;
+align-items:center;
+gap:25px;
 }
 
 /* AVATAR */
-
-#discord-box{
-position:relative;
-display:inline-block;
-}
+#discord-box{position:relative;}
 
 .avatar{
 width:110px;
 border-radius:50%;
-margin-bottom:15px;
 border:3px solid #00ff88;
-transition:.3s;
 }
-
-/* STATUS DOT */
 
 #status-dot{
 position:absolute;
@@ -151,8 +134,13 @@ border:3px solid #001100;
 .idle{background:#faa61a;}
 .dnd{background:#f04747;}
 
-/* LINKS HOVER */
+/* ACTIVITY */
+.activity{
+font-size:13px;
+opacity:.85;
+}
 
+/* LINKS */
 .links a{
 display:inline-block;
 margin:5px;
@@ -170,8 +158,34 @@ background:#003300;
 box-shadow:0 0 12px #00ff88;
 }
 
-/* GLITCH */
+/* PLUGIN */
+.plugin-wrapper{
+display:flex;
+align-items:center;
+gap:20px;
+}
 
+.plugin-avatar{
+width:90px;
+height:90px;
+border-radius:14px;
+border:2px solid #00ff88;
+box-shadow:0 0 12px #00ff88;
+transition:.3s;
+}
+
+.plugin-avatar:hover{
+transform:scale(1.08);
+box-shadow:0 0 20px #00ff88;
+}
+
+.mod-card{
+background:#002200;
+padding:15px;
+border-radius:12px;
+}
+
+/* GLITCH */
 .glitch{
 position:relative;
 font-weight:600;
@@ -209,60 +223,57 @@ animation:glitchBottom 2s infinite linear;
 100%{clip-path:inset(80% 0 0 0);}
 }
 
-/* MOD */
-
-.mod-card{
-background:#002200;
-padding:15px;
-border-radius:12px;
-}
-
 </style>
-
 </head>
 
 <body>
 
 <canvas id="matrix"></canvas>
 
-<div id="boot">
-<div id="boot-text"></div>
-</div>
+<div id="boot"><div id="boot-text"></div></div>
 
 <div class="wrapper">
 <div class="card">
 
-<!-- AVATAR -->
+<!-- HEADER -->
+<div class="header">
 
 <div id="discord-box">
 <img id="discord-avatar" class="avatar" src="assets/avatar.png">
 <div id="status-dot"></div>
 </div>
 
-<!-- GLITCH NAME -->
-
+<div>
 <h1 id="typing" class="glitch" data-text="Lamyrent"></h1>
+<div id="activity" class="activity">Loading activity...</div>
+</div>
+
+</div>
 
 <!-- ABOUT -->
-
 <div class="section">
 <h2>About Me</h2>
-<p>
-I'm Lamyrent — a developer focused on Minecraft modding, plugins, and creative projects.
-</p>
+<p>I'm Lamyrent — a developer focused on Minecraft modding, plugins, and creative projects.</p>
 </div>
 
 <!-- LINKS -->
-
 <div class="section links">
-<a href="https://github.com/MrLamyrent">GitHub</a>
-<a href="#">Discord</a>
-<a href="#">Telegram</a>
-<a href="#">Steam</a>
+
+<!-- ВСТАВЬ СВОЙ GITHUB -->
+<a href="https://github.com/MrLamyrent" target="_blank">GitHub</a>
+
+<!-- пример: https://discord.gg/... -->
+<a href="PASTE_DISCORD_LINK" target="_blank">Discord</a>
+
+<!-- пример: https://t.me/... -->
+<a href="PASTE_TELEGRAM_LINK" target="_blank">Telegram</a>
+
+<!-- пример: https://steamcommunity.com/id/... -->
+<a href="PASTE_STEAM_LINK" target="_blank">Steam</a>
+
 </div>
 
 <!-- YOUTUBE -->
-
 <div class="section">
 <h2>YouTube</h2>
 <iframe width="100%" height="350"
@@ -271,15 +282,18 @@ frameborder="0"
 allowfullscreen></iframe>
 </div>
 
-<!-- MOD -->
-
+<!-- PLUGIN -->
 <div class="section">
 <h2>My Plugin</h2>
+
+<div class="plugin-wrapper">
+<img src="assets/avatar-paper.png" class="plugin-avatar">
 <div id="modrinth" class="mod-card">loading...</div>
 </div>
 
-<!-- VISITS -->
+</div>
 
+<!-- VISITS -->
 <div class="section">
 <h2>Visitors</h2>
 <p id="visits">loading...</p>
@@ -290,25 +304,41 @@ allowfullscreen></iframe>
 
 <script>
 
-/* NAME (для glitch) */
+/* NAME */
 document.getElementById("typing").innerText="Lamyrent";
 
-/* BOOT */
+/* CURSOR GLOW */
+document.addEventListener("mousemove",e=>{
+document.body.style.setProperty("--x",e.clientX+"px");
+document.body.style.setProperty("--y",e.clientY+"px");
+document.body.style.setProperty("background-position",`${e.clientX}px ${e.clientY}px`);
+document.body.style.setProperty("--mouse-x",e.clientX+"px");
+document.body.style.setProperty("--mouse-y",e.clientY+"px");
 
-const bootLines=["Booting...","Loading...","Connecting...","Auth...","Welcome User."];
+document.body.querySelector("body::before");
+});
+
+/* BOOT TERMINAL */
+const bootLines=[
+"booting kernel...",
+"injecting shaders...",
+"loading modules...",
+"connecting to discord api...",
+"starting lamyrent.sys",
+"access granted."
+];
+
 let b=0;
-
 (function boot(){
 if(b<bootLines.length){
-document.getElementById("boot-text").innerHTML+=bootLines[b++]+"<br>";
-setTimeout(boot,600);
+bootText.innerHTML+=bootLines[b++]+"<br>";
+setTimeout(boot,500);
 }else{
-setTimeout(()=>boot=document.getElementById("boot").style.display="none",800);
+setTimeout(()=>boot.style.display="none",800);
 }
 })();
 
 /* MATRIX */
-
 const canvas=document.getElementById("matrix");
 const ctx=canvas.getContext("2d");
 
@@ -335,7 +365,7 @@ ctx.fillStyle="rgba(0,0,0,0.05)";
 ctx.fillRect(0,0,canvas.width,canvas.height);
 
 ctx.fillStyle="#0f0";
-ctx.font=fontSize+"px monospace";
+ctx.font=fontSize+"px monospace;
 
 drops.forEach((y,i)=>{
 const text=letters[Math.floor(Math.random()*2)];
@@ -345,45 +375,42 @@ drops[i]++;
 });
 },33);
 
-/* DISCORD */
-
+/* DISCORD + ACTIVITY */
 fetch("https://api.lanyard.rest/v1/users/986947762132254732")
 .then(r=>r.json())
 .then(({data:d})=>{
+
 const avatar=document.getElementById("discord-avatar");
 avatar.src=`https://cdn.discordapp.com/avatars/${d.discord_user.id}/${d.discord_user.avatar}.png`;
 
 const dot=document.getElementById("status-dot");
-dot.className="";
-dot.classList.add(d.discord_status);
+dot.className=d.discord_status;
 
-const colors={
-online:"#43b581",
-idle:"#faa61a",
-dnd:"#f04747",
-offline:"#747f8d"
-};
+const act=document.getElementById("activity");
 
-avatar.style.borderColor=colors[d.discord_status] || "#00ff88";
+if(d.listening_to_spotify){
+act.innerText=`Listening: ${d.spotify.song} — ${d.spotify.artist}`;
+}else if(d.activities.length>0){
+act.innerText=`${d.activities[0].name}`;
+}else{
+act.innerText="Idle";
+}
+
 });
 
 /* VISITS */
-
 fetch("https://visitors.lamyrent.workers.dev")
 .then(r=>r.json())
 .then(data=>{
-document.getElementById("visits").innerText=data.visits+" visits";
+visits.innerText=data.visits+" visits";
 })
-.catch(()=>{
-document.getElementById("visits").innerText="error";
-});
+.catch(()=>visits.innerText="error");
 
 /* MODRINTH */
-
 fetch("https://api.modrinth.com/v2/project/witherss")
 .then(r=>r.json())
 .then(mod=>{
-document.getElementById("modrinth").innerHTML=`
+modrinth.innerHTML=`
 <h3>${mod.title}</h3>
 <p>${mod.description}</p>
 <a href="https://modrinth.com/mod/${mod.slug}" target="_blank">Open →</a>
